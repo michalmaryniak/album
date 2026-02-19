@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Przemek – 50 lat! 🎉</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,400&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Montserrat', 'Arial Black', sans-serif;
+    background: #000;
+    color: #fff;
+    overflow-x: hidden;
+  }
+
+  /* ── progress bar ── */
+  #progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    width: 0%; height: 5px;
+    background: linear-gradient(90deg, #1db954, #00bcd4, #ff6b6b, #ffd700);
+    z-index: 9999;
+    transition: width 0.1s;
+  }
+
+  /* ── sections ── */
+  .section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 40px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ── cover ── */
+  .s-cover {
+    background: radial-gradient(ellipse at 20% 50%, #1a1a2e 0%, #0a0a0a 70%);
+    text-align: center;
+  }
+  .cover-50 {
+    font-size: clamp(9rem, 25vw, 20rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, #1db954 0%, #00e5ff 50%, #1db954 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+  }
+  .cover-name {
+    font-size: clamp(2.5rem, 7vw, 6rem);
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin: 0.5rem 0 0.3rem;
+  }
+  .cover-sub {
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 3rem;
+  }
+  .scroll-hint {
+    position: absolute;
+    bottom: 28px;
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    animation: bounce 2.2s ease-in-out infinite;
+  }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(9px)} }
+
+  /* ── stat cards (cover) ── */
+  .stats-row {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+  .stat-card {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 18px;
+    padding: 1.4rem 2rem;
+    text-align: center;
+    min-width: 130px;
+  }
+  .stat-num  { font-size: 3.5rem; font-weight: 900; line-height: 1; }
+  .stat-lbl  { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-top: 0.4rem; }
+
+  /* ── chapter header ── */
+  .ch {
+    text-align: center;
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 960px;
+  }
+  .ch-num {
+    font-size: 0.68rem;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 0.4rem;
+  }
+  .ch-title {
+    font-size: clamp(2rem, 5vw, 3.8rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 0.6rem;
+  }
+  .ch-comment {
+    font-size: clamp(0.95rem, 1.8vw, 1.2rem);
+    color: rgba(255,255,255,0.72);
+    font-style: italic;
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  /* ── photo grid ── */
+  .grid {
+    display: grid;
+    gap: 10px;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto 1rem;
+  }
+  .g2  { grid-template-columns: repeat(2, 1fr); }
+  .g3  { grid-template-columns: repeat(3, 1fr); }
+  .g4  { grid-template-columns: repeat(4, 1fr); }
+
+  .pic {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.04);
+    aspect-ratio: 1;
+    cursor: pointer;
+  }
+  .pic.sq   { aspect-ratio: 1; }
+  .pic.tall { aspect-ratio: 3/4; }
+  .pic.wide { aspect-ratio: 4/3; }
+  .pic.land { aspect-ratio: 16/9; }
+
+  .pic img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s ease;
+  }
+  .pic:hover img { transform: scale(1.07); }
+
+  .cap {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.88));
+    padding: 28px 10px 10px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.4;
+    transform: translateY(101%);
+    transition: transform 0.3s ease;
+  }
+  .pic:hover .cap { transform: translateY(0); }
+
+  .badge {
+    position: absolute;
+    top: 7px; right: 7px;
+    background: #ff4757;
+    color: #fff;
+    font-size: 0.58rem;
+    font-weight: 900;
+    padding: 2px 7px;
+    border-radius: 20px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    z-index: 2;
+  }
+  .badge.gold { background: #ffd700; color: #000; }
+
+  /* ── section colours ── */
+  .s-childhood { background: linear-gradient(140deg, #1a0533 0%, #2d1b69 40%, #0d7377 100%); }
+  .s-youth     { background: linear-gradient(140deg, #4a0072 0%, #c62a88 60%, #ff8c42 100%); }
+  .s-party90   { background: linear-gradient(140deg, #12002f 0%, #6a0080 50%, #ad007c 100%); }
+  .s-love      { background: linear-gradient(140deg, #1a0010 0%, #b5173a 50%, #f7971e 100%); }
+  .s-dadnew    { background: linear-gradient(140deg, #001429 0%, #004060 50%, #007ea7 100%); }
+  .s-dadhero   { background: linear-gradient(140deg, #003020 0%, #0a5c3e 50%, #2ea05a 100%); }
+  .s-travel    { background: linear-gradient(140deg, #000428 0%, #004e92 50%, #e94560 100%); }
+  .s-sport     { background: linear-gradient(140deg, #0d0d0d 0%, #7f0000 50%, #d63031 100%); }
+  .s-party     { background: linear-gradient(140deg, #10002b 0%, #6b2fa0 50%, #e040fb 100%); }
+  .s-home      { background: linear-gradient(140deg, #001845 0%, #003566 50%, #006494 100%); }
+  .s-hof       { background: linear-gradient(140deg, #7f0000 0%, #c0392b 35%, #f39c12 70%, #8e44ad 100%); }
+  .s-outro     { background: radial-gradient(ellipse at center, #302b63 0%, #0f0c29 80%); }
+
+  /* ── year label ── */
+  .ybadge {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 0.8rem;
+  }
+
+  /* ── sub-group label ── */
+  .sub-label {
+    text-align: center;
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin: 1.2rem 0 0.6rem;
+  }
+
+  /* ── feature photo ── */
+  .feature-photo {
+    border-radius: 16px;
+    overflow: hidden;
+    max-width: 420px;
+    width: 100%;
+    margin: 1.5rem auto;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+  }
+  .feature-photo img { width: 100%; height: auto; display: block; }
+
+  /* ── ticker ── */
+  .ticker-wrap {
+    width: 100%; overflow: hidden;
+    background: rgba(0,0,0,0.3);
+    padding: 14px 0;
+    margin: 2rem 0;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .ticker {
+    display: inline-flex;
+    animation: ticker 25s linear infinite;
+    white-space: nowrap;
+  }
+  .ticker span {
+    padding: 0 2.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  /* ── fade-in observer ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.85s ease, transform 0.85s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── confetti canvas ── */
+  #confetti-canvas {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  /* ── responsive ── */
+  @media (max-width: 768px) {
+    .section { padding: 60px 18px 40px; }
+    .g4 { grid-template-columns: repeat(2, 1fr); }
+    .g3 { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .g2, .g3, .g4 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- ═══════════════════════════════════════════
+     COVER
+═══════════════════════════════════════════ -->
+<div class="section s-cover">
+  <canvas id="confetti-canvas"></canvas>
+
+  <div style="position:relative;z-index:1;text-align:center;">
+    <div class="cover-sub">🎉 Urodzinowy album wspomnień 🎉</div>
+    <div class="cover-50">50</div>
+    <div class="cover-name">Przemek</div>
+    <div class="cover-sub">Twoje życie w obrazkach</div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-num" style="color:#1db954">50</div>
+        <div class="stat-lbl">lat niesamowitości</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:#00e5ff">∞</div>
+        <div class="stat-lbl">wspomnień</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:#ffd700">1</div>
+        <div class="stat-lbl">jedyny taki Przemek</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">↓ &nbsp; przewijaj &nbsp; ↓</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ROZDZIAŁ 1 – MAŁY PRZEMEK
+═══════════════════════════════════════════ -->
+<div class="section s-childhood fade-in">
+  <div class="ch">
+    <div class="ch-num">Rozdział 1</div>
+    <div class="ch-title">Mały Przemek 👶</div>
+    <div class="ch-comment">Bo każdy wielki człowiek zaczyna jako mały brzdąc…<br>i już wtedy widać było, że to będzie ktoś wyjątkowy!</div>
+  </div>
+
+  <div class="grid g4" style="max-width:860px">
+    <div class="pic sq">
+      <img src="20260207_123438.jpg" alt="">
+      <div class="cap">Maleńki Przemek – i już wtedy wiedział, że będzie wielki! 😄</div>
+    </div>
+    <div class="pic sq">
+      <img src="20260207_123918.jpg" alt="">
+      <div class="cap">Zabawy z rodzeństwem – ekipa zawsze razem</div>
+    </div>
+    <div class="pic sq">
+      <img src="20260207_124343~2.jpg" alt="">
+      <div class="cap">Klasyczna sesja na dywanie 📸</div>
+    </div>
+    <div class="pic sq">
+      <img src="20260207_124553~2.jpg" alt="">
+      <div class="cap">Mocna ekipa już od najmłodszych lat</div>
+    </div>
+    <div class="pic sq">
+      <img src="20260207_125055~2.jpg" alt="">
+      <div class="cap">Pierwsze Mikołajki 🎄 – tradycja na całe życie!</div>
+    </div>
+    <div class="pic sq">
+      <img src="20260207_125247~2.jpg" alt="">
+      <div class="cap">Trzej muszkieterowie 🤺</div>
+    </div>
+    <div class="pic sq">
+      <img src="20260207_125541~2.jpg" alt="">
+      <div class="cap">Zabawa była zawsze na pierwszym miejscu</div>
+    </div>
+    <div class="pic sq">
+      <img src="20260207_144816.jpg" alt="">
+      <div class="cap">Lato, ponton i wolność – co więcej potrzeba? ☀️</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ROZDZIAŁ 2 – LATA 90.
+═══════════════════════════════════════════ -->
+<div class="section s-youth fade-in">
+  <div class="ch">
+    <div class="ch-num">Rozdział 2</div>
+    <div class="ch-title">Lata 90. – złota epoka 🕺</div>
+    <div class="ch-comment">Kiedy ból po imprezie trwał tylko do rana i forma była naprawdę imponująca</div>
+  </div>
+
+  <div class="grid g3" style="max-width:900px">
+    <div class="pic sq">
+      <img src="IMG_5780.jpg" alt="">
+      <div class="cap">Młody Przemek za kierownicą – pewny siebie jak zawsze! 🚗</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_5781.jpg" alt="">
+      <div class="cap">Lato nad wodą na pomoście – piękne czasy ☀️</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_5788.jpg" alt="">
+      <div class="cap">Bałtyk, słońce i młodość – klasyczny letni wypad! 🏖️</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_5789.jpg" alt="">
+      <div class="cap">Budowanie zamku z piasku? Forma jak z okładki! 💪</div>
+    </div>
+    <div class="pic sq">
+      <img src="pix22.jpg" alt="">
+      <div class="cap">Ekipa z czasów szalejącej młodości 🎓</div>
+    </div>
+    <div class="pic sq">
+      <img src="pix25.jpg" alt="">
+      <div class="cap">Praca fizyczna – charakter się kuje w trudzie! 🔨</div>
+    </div>
+  </div>
+
+  <div class="sub-label">😂 &nbsp; Trzy klasyki dekady &nbsp; 😂</div>
+
+  <div class="grid g3" style="max-width:900px">
+    <div class="pic sq">
+      <img src="IMG_5782.jpg" alt="">
+      <div class="badge">🤸 skok zsynchronizowany!</div>
+      <div class="cap">Zsynchronizowany skok z pomostu – poziom olimpijski! 🥇</div>
+    </div>
+    <div class="pic sq">
+      <img src="pix24.jpg" alt="">
+      <div class="badge">🥃 klasyk!</div>
+      <div class="cap">„Wódka Robotnicza" z gwinta – studencki symbol epoki. Nie oceniamy. 😅</div>
+    </div>
+    <div class="pic sq">
+      <img src="pix26.jpg" alt="">
+      <div class="badge">😂 gotowi na wszystko!</div>
+      <div class="cap">Maski gazowe, kaski i robocze stroje – ta ekipa była przygotowana na dosłownie wszystko! 🎭</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ROZDZIAŁ 3 – IMPREZY KOSTIUMOWE
+═══════════════════════════════════════════ -->
+<div class="section s-party90 fade-in">
+  <div class="ch">
+    <div class="ch-num">Rozdział 3</div>
+    <div class="ch-title">Artysta duszy zbiorowej 🎭</div>
+    <div class="ch-comment">Żadna impreza kostiumowa nie przebiegała bez Przemka w stroju – i żadna nie była tak samo epicka</div>
+  </div>
+
+  <div class="grid g2" style="max-width:820px">
+    <div class="pic tall">
+      <img src="IMG_5783.jpg" alt="">
+      <div class="badge">🤴 srebrny hełm!</div>
+      <div class="cap">Bal kostiumowy – srebrny hełm z pomponami, pluszowy miś, cały look. To mógł być tylko Przemek! 👑</div>
+    </div>
+    <div class="pic tall">
+      <img src="IMG_5786.jpg" alt="">
+      <div class="cap">Lata 90. w pełnej krasie – każdy ma swój look, każdy ma energię 🔥</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_5785.jpg" alt="">
+      <div class="badge">📸 cultowe selfie!</div>
+      <div class="cap">Widok z dołu na ekipę w kostiumach – cultowe grupowe selfie! 😎</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_5790.jpg" alt="">
+      <div class="badge">😂 ratunku!</div>
+      <div class="cap">Pies zajął i kanapę, i Przemka. Wyraz tych oczu mówi WSZYSTKO! 🐩😱</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ROZDZIAŁ 4 – MIŁOŚĆ I ŚLUB
+═══════════════════════════════════════════ -->
+<div class="section s-love fade-in">
+  <div class="ch">
+    <div class="ch-num">Rozdział 4</div>
+    <div class="ch-title">Znalazłeś tę jedną ❤️</div>
+    <div class="ch-comment">I razem pojechaliście na koniec świata – a potem wróciło się do ołtarza</div>
+  </div>
+
+  <div class="grid g3" style="max-width:900px">
+    <div class="pic wide">
+      <img src="Kinderdijk%20021.jpg" alt="">
+      <div class="cap">Kinderdijk – wiatraki, złota godzina i para zakochanych 🌅🇳🇱</div>
+    </div>
+    <div class="pic sq">
+      <img src="025_Praga.jpg" alt="">
+      <div class="cap">Praga – na tle katedry św. Wita ✨</div>
+    </div>
+    <div class="pic sq">
+      <img src="S4300088.JPG" alt="">
+      <div class="cap">Kanałami Amsterdamu na łódce 🚢</div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin:1.5rem 0 0.8rem">
+    <div class="ybadge">💍 I wtedy nastąpiło to…</div>
+    <div class="ch-title" style="font-size:clamp(2rem,5vw,3.5rem);color:#ffd700">Ślub! 🥂</div>
+  </div>
+
+  <div class="grid g3" style="max-width:900px">
+    <div class="pic tall">
+      <img src="IMG_5529-2.jpg" alt="">
+      <div class="cap">Wymiana obrączek – ten uśmiech mówi wszystko 💍</div>
+    </div>
+    <div class="pic tall">
+      <img src="IMG_5705-2.jpg" alt="">
+      <div class="cap">Pierwszy taniec – piękny, wzruszający moment ❤️</div>
+    </div>
+    <div class="pic tall">
+      <img src="IMG_6143-2.jpg" alt="">
+      <div class="cap">I tak tańczyli całą noc… 💃🕺</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ROZDZIAŁ 5 – NOWY TATA
+═══════════════════════════════════════════ -->
+<div class="section s-dadnew fade-in">
+  <div class="ch">
+    <div class="ch-num">Rozdział 5</div>
+    <div class="ch-title">Nowy tata 👶💙</div>
+    <div class="ch-comment">Rok 2011 – świat zmienił się na zawsze. I to na lepsze.</div>
+  </div>
+
+  <div class="grid g2" style="max-width:860px">
+    <div class="pic wide">
+      <img src="fotoZ_2m-c%20107.jpg" alt="">
+      <div class="cap">Świeżo upieczony tata śpi obok swojego noworodka. Jedno z najpiękniejszych zdjęć w całym albumie 🌙</div>
+    </div>
+    <div class="pic wide">
+      <img src="DSCN1386.JPG" alt="">
+      <div class="cap">23.09.2011 – Tata czyta córeczce „Kaczkę Dziwaczkę". Takiego taty nie ma drugiego! 📖❤️</div>
+    </div>
+    <div class="pic sq">
+      <img src="DSCN2998.JPG" alt="">
+      <div class="badge">😂 multitasking!</div>
+      <div class="cap">Kuchnia + dziecko w nosidełku + pilot w ręku. Multitasking Level 9000! 🍳👶📺</div>
+    </div>
+    <div class="pic sq">
+      <img src="DSCN1778.JPG" alt="">
+      <div class="cap">Grudzień 2011 – córeczka w imprezowej czapeczce. Pierwsza impreza noworoczna zaliczona! 🎉</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ROZDZIAŁ 6 – TATA SUPERBOHATER
+═══════════════════════════════════════════ -->
+<div class="section s-dadhero fade-in">
+  <div class="ch">
+    <div class="ch-num">Rozdział 6</div>
+    <div class="ch-title">Tata – superbohater 🦸‍♂️</div>
+    <div class="ch-comment">Taksówkarz, woźnica, wspinacz, wioślarz i całodobowa atrakcja – wszystko w jednym</div>
+  </div>
+
+  <div class="grid g3" style="max-width:1000px">
+    <div class="pic sq">
+      <img src="DSCN2939.JPG" alt="">
+      <div class="cap">2012 – córeczka na ramionach, kucyk do głaskania. Dzień idealny! 🐴</div>
+    </div>
+    <div class="pic sq">
+      <img src="DSCN6368.JPG" alt="">
+      <div class="badge">🚂 tata-lokomotywa!</div>
+      <div class="cap">Wóz drabiniasty z dziećmi w komplecie – darmowy transport 24/7! 🛒</div>
+    </div>
+    <div class="pic sq">
+      <img src="DSCN7040.JPG" alt="">
+      <div class="cap">Zima, górska ośnica i dmuchane koło. Kto ciągnie? Tata oczywiście! ⛄</div>
+    </div>
+    <div class="pic sq">
+      <img src="DSC_0076.JPG" alt="">
+      <div class="cap">Kapitan Przemek z całą załogą na pokładzie 🚣</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20190731_144604.jpg" alt="">
+      <div class="cap">Córcia na ramionach, leśna ścieżka – klasyczna wycieczka 🌲</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_4269.jpg" alt="">
+      <div class="cap">Nocna wyprawa – córka na ramionach, on prowadzi grupę w ciemnościach 🌙</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20190801_130008.jpg" alt="">
+      <div class="cap">Polowanie na skarby z dziećmi – mapa wyprawiona! 🗺️</div>
+    </div>
+    <div class="pic sq">
+      <img src="DSCN7598.JPG" alt="">
+      <div class="badge">🥊 round 1!</div>
+      <div class="cap">„A teraz pokażę ci, jak boksuje tata!" – lekcja boksu nad Bałtykiem 🥊</div>
+    </div>
+    <div class="pic sq">
+      <img src="DSCN7602.JPG" alt="">
+      <div class="badge">🌽 kolba family!</div>
+      <div class="cap">Troje, jedna kukurydza każde – rodzinna uczta na plaży! 🌽🌽🌽</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ROZDZIAŁ 7 – PODRÓŻE
+═══════════════════════════════════════════ -->
+<div class="section s-travel fade-in">
+  <div class="ch">
+    <div class="ch-num">Rozdział 7</div>
+    <div class="ch-title">Świat jest za mały 🌍</div>
+    <div class="ch-comment">Amsterdam, Tanzania, Karpacz, Zanzibar… Przemek wszędzie zostawił swój ślad</div>
+  </div>
+
+  <!-- Amsterdam -->
+  <div class="sub-label">🇳🇱 Niderlandy – Koningsdag!</div>
+  <div class="grid g3" style="max-width:900px">
+    <div class="pic sq">
+      <img src="S4300075.JPG" alt="">
+      <div class="cap">Koningsdag – pomarańczowy król kanałów Amsterdamu! 🍊👑</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_0619.JPG" alt="">
+      <div class="cap">Rowerem przez Amsterdam w pomarańczowej koszuli – jak lokalny! 🚲</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_0653.JPG" alt="">
+      <div class="badge">😂 do wody!</div>
+      <div class="cap">„Wypchnij mnie do kanału!" – klasyczne turystyczne zdjęcie. Prawie wpadł! 🏊</div>
+    </div>
+  </div>
+  <div class="grid g3" style="max-width:900px;margin-top:10px">
+    <div class="pic sq">
+      <img src="Rotterdam%20002.jpg" alt="">
+      <div class="cap">Rotterdam – symulator sterowania statkiem. Nowy kapitan portu! ⚓</div>
+    </div>
+    <div class="pic sq">
+      <img src="Kinderdijk%20021.jpg" alt="">
+      <div class="cap">Kinderdijk – najpiękniejszy zachód słońca nad holenderskimi wiatrakami 🌅</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20190728_165633.jpg" alt="">
+      <div class="cap">Warszawa – przy Syrenace, ze stadionem w tle. Stolica zaliczona! 🇵🇱</div>
+    </div>
+  </div>
+
+  <!-- Tanzania -->
+  <div class="sub-label">🌍 Tanzania 2008</div>
+  <div class="grid g2" style="max-width:700px">
+    <div class="pic sq">
+      <img src="Tanzania%20VII%202008%20cz%20II%20134.jpg" alt="">
+      <div class="badge gold">🦁 selfie z lwem!</div>
+      <div class="cap">Selfie z lwem – kiedy Przemek się boi? Dokładnie – nigdy! 🦁😎</div>
+    </div>
+    <div class="pic sq">
+      <img src="Tanzania%20VII%202008%20cz%20II%20148.jpg" alt="">
+      <div class="cap">Afrykańska sawanna – niezapomniana przygoda 🌅</div>
+    </div>
+    <div class="pic sq">
+      <img src="Tanzania%20VII%202008%20cz%20II%20155.jpg" alt="">
+      <div class="cap">Tanzania – egzotyka na najwyższym poziomie 🌴</div>
+    </div>
+    <div class="pic sq">
+      <img src="Tanzania%20VII%202008%20cz%20II%20190.jpg" alt="">
+      <div class="cap">Afryka na zawsze w sercu ❤️🌍</div>
+    </div>
+  </div>
+
+  <!-- Mountains -->
+  <div class="sub-label">🏔️ Góry i okolice</div>
+  <div class="grid g2" style="max-width:680px">
+    <div class="pic sq">
+      <img src="102_Karpacz.jpg" alt="">
+      <div class="cap">Karpacz – przy drogowskazie szlaków górskich 🏔️</div>
+    </div>
+    <div class="pic sq">
+      <img src="126_Karpacz.jpg" alt="">
+      <div class="badge">😂 dramat!</div>
+      <div class="cap">„Moja dusza leży na tej skale…" – dramatyzm na poziomie teatru narodowego 🎭</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ROZDZIAŁ 8 – SPORT
+═══════════════════════════════════════════ -->
+<div class="section s-sport fade-in">
+  <div class="ch">
+    <div class="ch-num">Rozdział 8</div>
+    <div class="ch-title">Sportowiec pełną gębą 🏆</div>
+    <div class="ch-comment">Wakeboard, hokej, narciarstwo, morsowanie, bieg z przeszkodami… Czy on w ogóle odpoczywa?!</div>
+  </div>
+
+  <div class="grid g3" style="max-width:1000px">
+    <div class="pic sq">
+      <img src="DSC_0024(2).JPG" alt="">
+      <div class="cap">Wakeboard na pełnych obrotach! Na wodzie jak ryba 🏄</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20210214_155505.jpg" alt="">
+      <div class="cap">Walentynki 2021 – hokej na zamarzniętym jeziorze. Romantycznie? Jak najbardziej! 🏒❤️</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20210108_114826.jpg" alt="">
+      <div class="cap">Narty biegowe w śnieżnym lesie – Nordic style ❄️</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20181229_183509.jpg" alt="">
+      <div class="cap">Nocne narty z ekipą – i dzieci już na stoku! ⛷️🌙</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20200213_125316.jpg" alt="">
+      <div class="cap">Na stoku z dziećmi – tata-instruktor w akcji 🎿</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20221009_154206.jpg" alt="">
+      <div class="cap">Runmageddon – drążki, błoto i ból. Żaden problem! 💪</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20200314_124845.jpg" alt="">
+      <div class="badge">🥶 mors!!</div>
+      <div class="cap">Zimna woda, wełniana czapka, uśmiech od ucha do ucha – prawdziwy mors! 🧊😂</div>
+    </div>
+    <div class="pic sq">
+      <img src="DSC_0089.JPG" alt="">
+      <div class="badge">😂 innowacja!</div>
+      <div class="cap">Wakeboardowy klasyk po wiejsku: kosiarka + lina + deska = wynalazek roku! 🚜🏄</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20201003_163353.jpg" alt="">
+      <div class="badge">🔧 awaria!</div>
+      <div class="cap">Kiedy górski rower mówi „nie". Klasyczna historia każdego kolarza! 🚵💀</div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:1rem">
+    <div class="pic sq" style="display:inline-block;max-width:280px;border-radius:12px;overflow:hidden;vertical-align:top">
+      <img src="IMG_20210812_154028.jpg" alt="" style="width:100%;display:block">
+      <div class="cap" style="position:static;transform:none;padding:0.5rem 0.75rem;background:rgba(0,0,0,0.6);font-size:0.75rem">
+        <div class="badge" style="position:static;display:inline-block;margin-bottom:4px">😂 po swojemu!</div><br>
+        Każdy turysta wspina się na drogowskaz. Oczywiście. 🏔️
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ROZDZIAŁ 9 – IMPREZY
+═══════════════════════════════════════════ -->
+<div class="section s-party fade-in">
+  <div class="ch">
+    <div class="ch-num">Rozdział 9</div>
+    <div class="ch-title">Duszą towarzystwa 🎉</div>
+    <div class="ch-comment">Bez Przemka żadna impreza nie ma racji bytu. To oficjalnie stwierdzone.</div>
+  </div>
+
+  <div class="grid g3" style="max-width:1000px">
+    <div class="pic sq">
+      <img src="DSC_0001(10).JPG" alt="">
+      <div class="cap">Grillowanie z naszyjnikiem „40" – za 10 lat będzie naszyjnik „50"! 🔥🍖</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_0067.JPG" alt="">
+      <div class="badge">🗡️ szermierz!</div>
+      <div class="cap">Szermierz roku – pojedynek pogrzebaczami na domowej imprezie! 🤺</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_0261.JPG" alt="">
+      <div class="cap">Świąteczna impreza – vibe jest niepowtarzalny! 🎄</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20181224_184603.jpg" alt="">
+      <div class="badge">😂 mina roku!</div>
+      <div class="cap">Wigilia 2018 – selfie z miną, która jest najlepszą miną całego roku! 👀</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20191223_235818.jpg" alt="">
+      <div class="badge">🎁 rozmiar XXL!</div>
+      <div class="cap">Kiedy prezent jest prawie tak duży jak ty – grudzień 2019! 🎁😂</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20191111_145335.jpg" alt="">
+      <div class="cap">11 listopada – ognisko i kiełbaska na patyku. Polska tradycja! 🇵🇱🔥</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20220621_194000.jpg" alt="">
+      <div class="cap">Koncert z przyjaciółmi – dobra muzyka, dobra energia 🎵</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20220806_173845.jpg" alt="">
+      <div class="cap">Letnie spotkanie w ogrodzie – wszyscy razem! ☀️</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20191103_171941.jpg" alt="">
+      <div class="cap">Rodzinna kolacja – stół pełen jedzenia i miłości 🍽️</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ROZDZIAŁ 10 – DOM I CODZIENNOŚĆ
+═══════════════════════════════════════════ -->
+<div class="section s-home fade-in">
+  <div class="ch">
+    <div class="ch-num">Rozdział 10</div>
+    <div class="ch-title">W domu też nie jest nudno 🏠</div>
+    <div class="ch-comment">Bo codzienność z Przemkiem to ciągłe emocje, projekty i niespodzianki</div>
+  </div>
+
+  <div class="grid g3" style="max-width:1000px">
+    <div class="pic sq">
+      <img src="IMG_2680.JPG" alt="">
+      <div class="badge">🔧 Bob the Builder!</div>
+      <div class="cap">Pan Złota Rączka w pełnym ekwipunku! Kombinezon + wiertarka = legenda remontu 🔧</div>
+    </div>
+    <div class="pic sq">
+      <img src="DSC_0066(1).JPG" alt="">
+      <div class="cap">Noga w gipsie, laptop w rękach – praca nie czeka! 💻🦽</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20211015_220828.jpg" alt="">
+      <div class="badge">🐶 nowy domownik!</div>
+      <div class="cap">Nowy szczeniak + zielone wielkanocne skarpety + remont w tle = absolutnie idealny wieczór! 🐕🧦</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20211112_152921.jpg" alt="">
+      <div class="cap">Górska wycieczka – pies z głową na ramieniu Przemka. Najlepsza przyjaźń! 🐕🏔️</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20220331_213609.jpg" alt="">
+      <div class="badge">😂 relaks pro!</div>
+      <div class="cap">Mistrz relaksu – kanapowy tryb aktywowany. I pies też. 🛋️</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20191126_183040.jpg" alt="">
+      <div class="badge">🏓 turniej!</div>
+      <div class="cap">Ping-pong przy stole jadalnym – bo po co mieć stół do tenisa? 🏓</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20211230_214612.jpg" alt="">
+      <div class="cap">Sylwester 2021 – gotowanie z dziećmi w kuchni. Rodzinnie! 🍳</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20190308_210051.jpg" alt="">
+      <div class="cap">Wystawa Harry Potter z córką – dwa największe fany Hogwartu! ⚡🧙</div>
+    </div>
+    <div class="pic sq">
+      <img src="DSCF0043.JPG" alt="">
+      <div class="cap">Muzeum techniki – młody Przemek na zabytkowym motorze. Poza jak z plakatu! 🏍️</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ROZDZIAŁ 11 – HALL OF FAME ŚMIECHU
+═══════════════════════════════════════════ -->
+<div class="section s-hof fade-in">
+  <div class="ch">
+    <div class="ch-num">Rozdział 11</div>
+    <div class="ch-title">🏆 Hall of Fame Śmiechu 🏆</div>
+    <div class="ch-comment">Specjalnie wyselekcjonowane chwile, które przeszły do legendy. Tego nie da się zapomnieć.</div>
+  </div>
+
+  <!-- TOP 4 LEGENDARY -->
+  <div class="grid g2" style="max-width:860px">
+    <div class="pic sq">
+      <img src="DSC_0068(1).JPG" alt="">
+      <div class="badge gold">🦷 LEGENDA!</div>
+      <div class="cap">ZŁOTE ZĘBY + OKULARY = Rapper Przemek w pełnej krasie! Yo yo! 😎🤑</div>
+    </div>
+    <div class="pic sq">
+      <img src="20170502_105608.jpg" alt="">
+      <div class="badge gold">🐄 mleczarz!</div>
+      <div class="cap">„Trzeba sprawdzić jak to działa" – dojarnia muzealnej krowy. Podejście profesjonalne! 🐄😂</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20200704_151501.jpg" alt="">
+      <div class="badge gold">😒 mina ikona!</div>
+      <div class="cap">Burgerownia, gourmet hamburger i ta MINA. Arcydzieło ekspresji twarzy. 🍔😒</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20190720_171028.jpg" alt="">
+      <div class="badge gold">🦄 tata-jednorożec!</div>
+      <div class="cap">Tata-jednorożec czuwa nad bezpieczeństwem dzieci w morzu. Niezastąpiony! 🦄🌊</div>
+    </div>
+  </div>
+
+  <!-- supporting cast -->
+  <div class="grid g3" style="max-width:900px;margin-top:10px">
+    <div class="pic sq">
+      <img src="IMG_20190727_171835.jpg" alt="">
+      <div class="badge">🧸 milusie!</div>
+      <div class="cap">Dwóch dorosłych panów, Toruń i pluszaki w rękach. Żadnych wyjaśnień! 😂</div>
+    </div>
+    <div class="pic sq">
+      <img src="IMG_20200830_123347.jpg" alt="">
+      <div class="cap">Bałtyk, wydmy i pełna wczasowa energia. Klasyk! 🏖️</div>
+    </div>
+    <div class="pic sq">
+      <img src="z.plaza%20(16).JPG" alt="">
+      <div class="badge">🤸 akrobata!</div>
+      <div class="cap">Fikołki na tropikalnej plaży – bo zwykłe leżakowanie to nie dla Przemka! 🤸</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     OUTRO
+═══════════════════════════════════════════ -->
+<div class="section s-outro fade-in">
+  <div style="text-align:center;width:100%;max-width:800px;position:relative;z-index:1">
+
+    <div class="feature-photo">
+      <img src="IMG_20210809_135155.jpg" alt="Selfie z żoną w górach">
+    </div>
+
+    <div style="font-size:clamp(4rem,12vw,9rem);font-weight:900;background:linear-gradient(135deg,#1db954,#00e5ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin:1.5rem 0 0.5rem">
+      50 lat!
+    </div>
+    <div style="font-size:1.4rem;opacity:0.8;margin-bottom:0.5rem">
+      i wciąż pełen energii, pomysłów i humoru ⚡
+    </div>
+
+    <div class="ticker-wrap">
+      <div class="ticker">
+        <span>🎉 Sto lat Przemek!</span>
+        <span>🥂 Na kolejne 50 przygód!</span>
+        <span>❤️ Kochamy Cię!</span>
+        <span>🏆 Najlepszy tata, mąż i przyjaciel!</span>
+        <span>🌍 Świat jest za mały!</span>
+        <span>🐄 Mleczarz legend!</span>
+        <span>🦁 Selfie z lwem!</span>
+        <span>🎂 Wszystkiego najlepszego!</span>
+        <span>🎉 Sto lat Przemek!</span>
+        <span>🥂 Na kolejne 50 przygód!</span>
+        <span>❤️ Kochamy Cię!</span>
+        <span>🏆 Najlepszy tata, mąż i przyjaciel!</span>
+        <span>🌍 Świat jest za mały!</span>
+        <span>🐄 Mleczarz legend!</span>
+        <span>🦁 Selfie z lwem!</span>
+        <span>🎂 Wszystkiego najlepszego!</span>
+      </div>
+    </div>
+
+    <div class="stats-row" style="margin-top:2rem">
+      <div class="stat-card">
+        <div class="stat-num" style="color:#1db954">50</div>
+        <div class="stat-lbl">lat pięknego życia</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:#ff6b6b">♾️</div>
+        <div class="stat-lbl">powodów do śmiechu</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:#ffd700">1</div>
+        <div class="stat-lbl">jedyny taki Przemek</div>
+      </div>
+    </div>
+
+    <div style="margin-top:3rem;font-size:1rem;line-height:2;color:rgba(255,255,255,0.5)">
+      Jeszcze wiele przygód przed Tobą.<br>
+      <strong style="color:rgba(255,255,255,0.85)">Dziękujemy, że jesteś! 🎊</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════════ -->
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    document.getElementById('progress-bar').style.width = (scrolled / total * 100) + '%';
+  });
+
+  // Fade-in on scroll
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+
+  // Confetti on cover
+  (function () {
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const COLORS = ['#1db954','#00e5ff','#ff6b6b','#ffd700','#f39c12','#9b59b6','#e91e63'];
+    const pieces = Array.from({length: 90}, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      w: Math.random() * 9 + 4,
+      h: Math.random() * 5 + 3,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      speed: Math.random() * 1.8 + 0.4,
+      angle: Math.random() * Math.PI * 2,
+      rot: (Math.random() - 0.5) * 0.12
+    }));
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      pieces.forEach(p => {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.angle);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        ctx.restore();
+        p.y += p.speed;
+        p.angle += p.rot;
+        if (p.y > canvas.height + 20) {
+          p.y = -20;
+          p.x = Math.random() * canvas.width;
+        }
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+</script>
+</body>
+</html>
