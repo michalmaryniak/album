@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Przemek Wrapped 50 – fullscreen</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --bg1: #121212;
+      --bg2: #1e1e1e;
+      --accent1: #1db954;
+      --accent2: #fecd54;
+      --accent3: #ff5b8a;
+      --text-main: #ffffff;
+      --text-sub: #b3b3b3;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+      font-family: var(--font-main);
+      color: var(--text-main);
+    }
+
+    body {
+      position: relative;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 18px;
+      opacity: 0;
+      transform: translateX(40px);
+      pointer-events: none;
+      transition:
+        opacity 0.7s ease,
+        transform 0.7s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+      z-index: 2;
+    }
+
+    .slide.exit-left {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+
+    .slide-inner {
+      width: 100%;
+      max-width: 1100px;
+      min-height: min(90vh, 650px);
+      border-radius: 30px;
+      padding: 32px 26px;
+      background: radial-gradient(circle at top left, #3d265f, #121212 55%);
+      box-shadow: 0 24px 40px rgba(0,0,0,0.7);
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr);
+      gap: 26px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (max-width: 880px) {
+      .slide-inner {
+        grid-template-columns: minmax(0, 1fr);
+        min-height: auto;
+        padding: 24px 18px 22px;
+        border-radius: 22px;
+      }
+    }
+
+    .bg-blur {
+      position: absolute;
+      inset: -20%;
+      background-size: cover;
+      background-position: center;
+      filter: blur(24px) brightness(0.5);
+      opacity: 0.55;
+      z-index: -1;
+      transform: scale(1.1);
+    }
+
+    .gradient-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(253,200,70,0.35), transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .slide-tag {
+      position: absolute;
+      top: 18px;
+      right: 22px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.6);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-sub);
+    }
+
+    .kicker {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+    }
+
+    .title {
+      font-size: clamp(34px, 4.6vw, 48px);
+      font-weight: 800;
+      line-height: 1.05;
+      margin-bottom: 16px;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: var(--text-sub);
+      max-width: 440px;
+      margin-bottom: 18px;
+    }
+
+    .bullet {
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .meta {
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-top: 10px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+      margin-bottom: 4px;
+    }
+
+    .pill {
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.35);
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent1);
+    }
+
+    .photo-main {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #000;
+      min-height: 220px;
+      margin-bottom: 12px;
+    }
+
+    .photo-main img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo-label {
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.7);
+      font-size: 11px;
+    }
+
+    .photo-thumbs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .thumb-tile {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #000;
+      min-height: 70px;
+    }
+
+    .thumb-tile img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .player {
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .play-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      background: var(--accent1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.6);
+    }
+
+    .play-btn::before {
+      content: "";
+      width: 0;
+      height: 0;
+      border-left: 10px solid #000;
+      border-top: 7px solid transparent;
+      border-bottom: 7px solid transparent;
+      margin-left: 2px;
+    }
+
+    .track-bar {
+      flex: 1;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.15);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .track-progress {
+      position: absolute;
+      inset: 0;
+      width: 50%;
+      background: linear-gradient(90deg, var(--accent1), var(--accent3));
+    }
+
+    .track-meta {
+      font-size: 11px;
+    }
+
+    .nav-hint {
+      position: fixed;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      color: var(--text-sub);
+      background: rgba(0,0,0,0.75);
+      padding: 6px 12px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .nav-arrows {
+      position: fixed;
+      top: 50%;
+      right: 16px;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 20;
+    }
+
+    .nav-arrow-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(0,0,0,0.6);
+      color: var(--text-main);
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-arrow-btn:active {
+      transform: scale(0.96);
+    }
+
+    @media (max-width: 720px) {
+      .nav-arrows {
+        right: 8px;
+      }
+      .nav-arrow-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+      }
+      .slide-inner {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="nav-hint">Strzałki ← → albo kółko myszy, żeby zmieniać slajdy</div>
+<div class="nav-arrows">
+  <button class="nav-arrow-btn" id="prevBtn" aria-label="Poprzedni slajd">↑</button>
+  <button class="nav-arrow-btn" id="nextBtn" aria-label="Następny slajd">↓</button>
+</div>
+
+<!-- Slajdy generujemy w JS – tu tylko kontener -->
+<div id="slides-root"></div>
+
+<script>
+  // KONFIGURACJA SLAJDÓW – możesz zmieniać teksty, ale zostaw nazwy plików takie, jakie masz w katalogu
+  const slides = [
+    {
+      id: "intro",
+      tag: "Slide 1 · Intro",
+      kicker: "Przemek Wrapped 50",
+      title: "50 lat.\nJeden naprawdę dobry album.",
+      subtitle: "Z tej okazji zrobiliśmy Ci własne Wrapped: pełnoekranową playlistę zdjęć, wspomnień i min, których nie da się przewinąć.",
+      bullets: [
+        "• 50 lat w trybie premium – bez reklam, za to z bonusowymi bisami.",
+        "• Setki zdjęć, tysiące historii i komplet ludzi, którzy chcą dziś świętować razem z Tobą.",
+        "• To nie podsumowanie. To tylko pauza między jednym a drugim świetnym numerem."
+      ],
+      pills: [
+        "Ulubiony gatunek: śmiech na żywo",
+        "Tryb odtwarzania: losowo + powtarzaj ulubione",
+        "Czas trwania: wciąż rośnie"
+      ],
+      mainPhoto: "IMG_20210809_135155.jpg",
+      mainLabel: "Okładka jubileuszowa",
+      thumbs: [
+        "IMG_20201003_163353.jpg",
+        "pix22.jpg",
+        "pix24.jpg"
+      ],
+      bgPhoto: "IMG_20210809_135155.jpg"
+    },
+    {
+      id: "2020",
+      tag: "Slide 2 · 2019–2021",
+      kicker: "Top lata",
+      title: "Lata, w których wszystko przyspieszyło.",
+      subtitle: "Trochę domowych klimatów, trochę wyjazdów, trochę świata na opak – ale na każdej fotce ta sama ekipa.",
+      bullets: [
+        "• 2019–2021 – czas, kiedy doceniliśmy zwykłe spacery bardziej niż egzotyczne wyprawy.",
+        "• Domowe kadry stały się równie ważne, jak widoki z końca świata.",
+        "• Najlepsze jest to, że zawsze ktoś ma aparat pod ręką."
+      ],
+      pills: [
+        "Domowy stage",
+        "Spacerowa playlista",
+        "Świat chwilowo na pauzie"
+      ],
+      mainPhoto: "IMG_20191223_235818.jpg",
+      mainLabel: "Końcówka 2019 – spokojny refren",
+      thumbs: [
+        "IMG_20200213_125316.jpg",
+        "IMG_20200314_124845.jpg",
+        "IMG_20200516_163235.jpg"
+      ],
+      bgPhoto: "IMG_20200516_163235.jpg"
+    },
+    {
+      id: "summer2020",
+      tag: "Slide 3 · Lato",
+      kicker: "Letnie single",
+      title: "Gdzie lato brzmi najlepiej?",
+      subtitle: "Tam, gdzie jest słońce, dobra ekipa i ktoś, kto zawsze powie: „chodź, zrobimy jeszcze jedno zdjęcie”.",
+      bullets: [
+        "• Lipcowe kadry, w których widać więcej słońca niż zmarszczek.",
+        "• Plażowe i ogródkowe klimaty, czyli letni chill w najlepszym wydaniu.",
+        "• Uśmiechy, które nie potrzebują filtra."
+      ],
+      pills: [
+        "Temperatura: odpowiednio wysoka",
+        "Nastrój: 100% pozytyw",
+        "Częstotliwość śmiechu: niska, średnia, wysoka – zawsze wysoka"
+      ],
+      mainPhoto: "IMG_20200704_151501.jpg",
+      mainLabel: "Letni hymn w dobrym składzie",
+      thumbs: [
+        "IMG_20200704_165019.jpg",
+        "IMG_20200830_123347.jpg",
+        "z.plaza (16).JPG"
+      ],
+      bgPhoto: "IMG_20200704_151501.jpg"
+    },
+    {
+      id: "2021",
+      tag: "Slide 4 · 2021",
+      kicker: "Nowe rozdziały",
+      title: "Rok, w którym znów chciało się planować.",
+      subtitle: "Trochę zimy, trochę serduszek i sporo wieczorów, których nikt nie chciał kończyć.",
+      bullets: [
+        "• Styczeń, luty, listopad – każda pora roku ma swój własny soundtrack.",
+        "• Zdjęcia zrobione „tylko na chwilę” – a zostały na zawsze.",
+        "• Gdy w tle jest śmiech, pora roku przestaje mieć znaczenie."
+      ],
+      pills: [
+        "Tryb: ciepło, nawet w zimie",
+        "Motyw przewodni: „byle razem”",
+        "Poziom energii: wysoki"
+      ],
+      mainPhoto: "IMG_20210108_114826.jpg",
+      mainLabel: "Zimowy chill & ciepła ekipa",
+      thumbs: [
+        "IMG_20210214_155505.jpg",
+        "IMG_20211015_220828.jpg",
+        "IMG_20211112_152921.jpg"
+      ],
+      bgPhoto: "IMG_20211112_152921.jpg"
+    },
+    {
+      id: "2022",
+      tag: "Slide 5 · 2022",
+      kicker: "Kolejna playlista",
+      title: "Kadry, które nie potrzebują podpisów.",
+      subtitle: "Bo czasem wystarczy spojrzeć na zdjęcie, żeby dokładnie poczuć to samo, co wtedy.",
+      bullets: [
+        "• 2022 – rok, w którym zdjęcia mówią wszystko bez słów.",
+        "• Od kameralnych wieczorów po plenerowe wypady.",
+        "• Poziom bliskości: większy niż szerokość kadru."
+      ],
+      pills: [
+        "Głośność: głośny śmiech",
+        "Styl: „tak jak lubimy”",
+        "Efekt: chce się przewijać dalej"
+      ],
+      mainPhoto: "IMG_20211230_214612.jpg",
+      mainLabel: "Sylwestrowy remix",
+      thumbs: [
+        "IMG_20220331_213609.jpg",
+        "IMG_20220621_194000.jpg",
+        "IMG_20220806_173845.jpg"
+      ],
+      bgPhoto: "IMG_20220806_173845.jpg"
+    },
+    {
+      id: "2022b",
+      tag: "Slide 6 · Jesień",
+      kicker: "Jesienne brzmienia",
+      title: "Jesień też potrafi być ciepła.",
+      subtitle: "Zwłaszcza kiedy spędza się ją w dobrym towarzystwie i w jeszcze lepszych miejscach.",
+      bullets: [
+        "• Październikowe światło, które robi 90% roboty.",
+        "• Zdjęcia, na których każdy wygląda jak z okładki płyty.",
+        "• Kolejny dowód, że najważniejsza jest ekipa."
+      ],
+      pills: [
+        "Kolory: mocno nasycone",
+        "Emocje: zero filtrów",
+        "Tryb: „zatrzymaj tę chwilę”"
+      ],
+      mainPhoto: "IMG_20221009_154206.jpg",
+      mainLabel: "Jesienny singiel na repeat",
+      thumbs: [
+        "IMG_20210812_154028.jpg",
+        "IMG_20220331_213609.jpg",
+        "IMG_20211112_152921.jpg"
+      ],
+      bgPhoto: "IMG_20221009_154206.jpg"
+    },
+    {
+      id: "podroze",
+      tag: "Slide 7 · Podróże",
+      kicker: "Podróże",
+      title: "Gdy playlista przenosi się za granicę.",
+      subtitle: "Kilka kadrów, które pokazują, że lubisz sprawdzać, jak świat wygląda na żywo, nie tylko na tapecie.",
+      bullets: [
+        "• Miejsca, w których aparat pracuje w trybie ciągłym.",
+        "• Widoki, które trudno opisać słowami – dlatego robi się zdjęcia.",
+        "• „Pamiętasz ten wyjazd?” – zaczyna co najmniej 10 historii."
+      ],
+      pills: [
+        "Tryb: eksploracja",
+        "Playlisty: mieszanka lokalnych hitów",
+        "Pamiątki: więcej zdjęć niż magnesów"
+      ],
+      mainPhoto: "Kinderdijk 021.jpg",
+      mainLabel: "Holenderski chill",
+      thumbs: [
+        "Rotterdam 002.jpg",
+        "Tanzania VII 2008 cz II 134.jpg",
+        "Tanzania VII 2008 cz II 155.jpg"
+      ],
+      bgPhoto: "Tanzania VII 2008 cz II 148.jpg"
+    },
+    {
+      id: "podroze2",
+      tag: "Slide 8 · Safari & plaża",
+      kicker: "Egzotyka i piasek",
+      title: "Od safari do plaży.",
+      subtitle: "Czasem tłem jest sawanna, czasem Bałtyk – ważne, że z przodu widać uśmiech.",
+      bullets: [
+        "• Kadry z Tanzanii jak z dokumentu przyrodniczego, tylko lepsze, bo z Twoją ekipą.",
+        "• Plażowe zdjęcia, na których niby nic się nie dzieje – a dzieje się wszystko.",
+        "• Świat jest mały, kiedy oglądasz go z ludźmi, których lubisz."
+      ],
+      pills: [
+        "Klimat: mocno wakacyjny",
+        "Dress code: wygodny",
+        "Motyw: „tu jest dobrze”"
+      ],
+      mainPhoto: "Tanzania VII 2008 cz II 190.jpg",
+      mainLabel: "Safari z własną ścieżką dźwiękową",
+      thumbs: [
+        "z.plaza (16).JPG",
+        "pix25.jpg",
+        "pix26.jpg"
+      ],
+      bgPhoto: "z.plaza (16).JPG"
+    },
+    {
+      id: "bloopers",
+      tag: "Slide 9 · Bloopersy",
+      kicker: "Bonus track",
+      title: "Zdjęcia, które „miały iść do kosza”.",
+      subtitle: "Na szczęście nie poszły – bo to często one są gwiazdą wieczoru.",
+      bullets: [
+        "• Krzywe miny, zamknięte oczy i dziwne ujęcia – klasyk każdej dobrej galerii.",
+        "• To są te foty, przy których śmiech jest najgłośniejszy.",
+        "• Bez nich cały album byłby po prostu zbyt grzeczny."
+      ],
+      pills: [
+        "Gatunek: komedia dokumentalna",
+        "Ocena publiczności: 10/10",
+        "Status: nie kasować!"
+      ],
+      mainPhoto: "S4300075.JPG",
+      mainLabel: "Dowód, że było naprawdę wesoło",
+      thumbs: [
+        "S4300088.JPG",
+        "IMG_20211015_220828.jpg",
+        "IMG_20220331_213609.jpg"
+      ],
+      bgPhoto: "pix25.jpg"
+    },
+    {
+      id: "final",
+      tag: "Slide 10 · Finał",
+      kicker: "Finał",
+      title: "A teraz… czas na bis.",
+      subtitle: "To nie jest koniec albumu. To tylko moment, w którym wszyscy mówią: „Przemek, dzięki, że jesteś”.",
+      bullets: [
+        "• Życzenie nr 1: żebyś zawsze miał wokół siebie ludzi z tych zdjęć (i nowych też).",
+        "• Życzenie nr 2: żeby kolejna dekada miała jeszcze więcej kadrów.",
+        "• Życzenie nr 3: żebyś dalej tak chętnie klikał „play” na nowe przygody."
+      ],
+      pills: [
+        "Status: 50+ i wciąż na topie",
+        "Kategoria: klasyk, który się nie nudzi",
+        "Dalszy plan: kolejne sezony"
+      ],
+      mainPhoto: "IMG_20220806_173845.jpg",
+      mainLabel: "Kadr, który pasuje na okładkę",
+      thumbs: [
+        "IMG_20221009_154206.jpg",
+        "IMG_20211230_214612.jpg",
+        "IMG_20211112_152921.jpg"
+      ],
+      bgPhoto: "IMG_20220806_173845.jpg"
+    }
+  ];
+
+  const root = document.getElementById("slides-root");
+
+  function createSlide(slide, index, total) {
+    const section = document.createElement("section");
+    section.className = "slide";
+    section.dataset.index = index;
+
+    const inner = document.createElement("div");
+    inner.className = "slide-inner";
+
+    const bg = document.createElement("div");
+    bg.className = "bg-blur";
+    bg.style.backgroundImage = `url('${slide.bgPhoto}')`;
+
+    const grad = document.createElement("div");
+    grad.className = "gradient-overlay";
+
+    const left = document.createElement("div");
+    const right = document.createElement("div");
+
+    const kicker = document.createElement("div");
+    kicker.className = "kicker";
+    kicker.textContent = slide.kicker;
+
+    const title = document.createElement("div");
+    title.className = "title";
+    title.innerHTML = slide.title.replace(/\n/g, "<br>");
+
+    const subtitle = document.createElement("p");
+    subtitle.className = "subtitle";
+    subtitle.textContent = slide.subtitle;
+
+    left.appendChild(kicker);
+    left.appendChild(title);
+    left.appendChild(subtitle);
+
+    slide.bullets.forEach(b => {
+      const p = document.createElement("p");
+      p.className = "bullet";
+      p.textContent = b;
+      left.appendChild(p);
+    });
+
+    const pillRow = document.createElement("div");
+    pillRow.className = "pill-row";
+    slide.pills.forEach((t, i) => {
+      const pill = document.createElement("div");
+      pill.className = "pill";
+      if (i === 0) {
+        const dot = document.createElement("span");
+        dot.className = "pill-dot";
+        pill.appendChild(dot);
+      }
+      const span = document.createElement("span");
+      span.textContent = t;
+      pill.appendChild(span);
+      pillRow.appendChild(pill);
+    });
+    left.appendChild(pillRow);
+
+    if (index === 0) {
+      const player = document.createElement("div");
+      player.className = "player";
+      player.innerHTML = `
+        <div class="play-btn"></div>
+        <div class="track-bar"><div class="track-progress"></div></div>
+        <div class="track-meta">Odtwarzanie: \"Greatest Hits · 1976–2026\"</div>
+      `;
+      left.appendChild(player);
+    } else {
+      const meta = document.createElement("p");
+      meta.className = "meta";
+      meta.textContent = "Przewiń dalej – ta playlista ma jeszcze kilka mocnych numerów.";
+      left.appendChild(meta);
+    }
+
+    const mainPhoto = document.createElement("div");
+    mainPhoto.className = "photo-main";
+    const mainImg = document.createElement("img");
+    mainImg.src = slide.mainPhoto;
+    mainImg.alt = slide.mainLabel || "Zdjęcie";
+    const mainLabel = document.createElement("div");
+    mainLabel.className = "photo-label";
+    mainLabel.textContent = slide.mainLabel || "";
+    mainPhoto.appendChild(mainImg);
+    mainPhoto.appendChild(mainLabel);
+
+    const thumbs = document.createElement("div");
+    thumbs.className = "photo-thumbs";
+    slide.thumbs.forEach(src => {
+      const t = document.createElement("div");
+      t.className = "thumb-tile";
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = "";
+      t.appendChild(img);
+      thumbs.appendChild(t);
+    });
+
+    right.appendChild(mainPhoto);
+    right.appendChild(thumbs);
+
+    const tag = document.createElement("div");
+    tag.className = "slide-tag";
+    tag.textContent = slide.tag || `Slide ${index + 1} / ${total}`;
+
+    inner.appendChild(bg);
+    inner.appendChild(grad);
+    inner.appendChild(left);
+    inner.appendChild(right);
+    section.appendChild(inner);
+    section.appendChild(tag);
+
+    return section;
+  }
+
+  slides.forEach((s, i) => {
+    const node = createSlide(s, i, slides.length);
+    if (i === 0) node.classList.add("active");
+    root.appendChild(node);
+  });
+
+  let currentIndex = 0;
+  let isTransitioning = false;
+
+  function goToSlide(newIndex, direction = 1) {
+    if (isTransitioning || newIndex === currentIndex || newIndex < 0 || newIndex >= slides.length) return;
+    isTransitioning = true;
+
+    const current = document.querySelector(`.slide[data-index="${currentIndex}"]`);
+    const next = document.querySelector(`.slide[data-index="${newIndex}"]`);
+
+    if (!current || !next) {
+      isTransitioning = false;
+      return;
+    }
+
+    if (direction < 0) {
+      current.classList.add("exit-left");
+    }
+
+    next.classList.add("active");
+
+    setTimeout(() => {
+      current.classList.remove("active", "exit-left");
+      currentIndex = newIndex;
+      isTransitioning = false;
+    }, 700);
+  }
+
+  function nextSlide() {
+    goToSlide(currentIndex + 1, 1);
+  }
+
+  function prevSlide() {
+    goToSlide(currentIndex - 1, -1);
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === "PageDown") {
+      e.preventDefault();
+      nextSlide();
+    } else if (e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "PageUp") {
+      e.preventDefault();
+      prevSlide();
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      goToSlide(0, -1);
+    } else if (e.key === "End") {
+      e.preventDefault();
+      goToSlide(slides.length - 1, 1);
+    }
+  });
+
+  let wheelTimeout = null;
+  document.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    if (wheelTimeout) return;
+    if (e.deltaY > 0) {
+      nextSlide();
+    } else if (e.deltaY < 0) {
+      prevSlide();
+    }
+    wheelTimeout = setTimeout(() => {
+      wheelTimeout = null;
+    }, 350);
+  }, { passive: false });
+
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  prevBtn.addEventListener("click", prevSlide);
+  nextBtn.addEventListener("click", nextSlide);
+
+  // Kliknięcie w dowolny slajd też przechodzi dalej – idealne na rzutnik
+  root.addEventListener("click", () => {
+    nextSlide();
+  });
+</script>
+</body>
+</html>
