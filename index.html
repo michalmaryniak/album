@@ -438,6 +438,12 @@
 
   <div id="progress-bar"></div>
 
+  <!-- Navigation Arrows -->
+  <div id="nav-arrows" style="position:fixed;top:50%;left:20px;z-index:10000;display:flex;flex-direction:column;gap:20px;">
+    <button id="arrow-up" style="background:rgba(0,0,0,0.5);border:none;color:#fff;font-size:2rem;padding:8px 12px;border-radius:50%;cursor:pointer;">▲</button>
+    <button id="arrow-down" style="background:rgba(0,0,0,0.5);border:none;color:#fff;font-size:2rem;padding:8px 12px;border-radius:50%;cursor:pointer;">▼</button>
+  </div>
+
   <!-- ═══════════════════════════════════════════
      COVER
 ═══════════════════════════════════════════ -->
@@ -1282,6 +1288,31 @@
     }, { threshold: 0.08 });
     document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
 
+    // Navigation Arrows Scroll
+    const sections = Array.from(document.querySelectorAll('.section'));
+    function getCurrentSectionIndex() {
+      const scrollY = window.scrollY;
+      let idx = 0;
+      for (let i = 0; i < sections.length; i++) {
+        if (sections[i].offsetTop - 60 <= scrollY) {
+          idx = i;
+        }
+      }
+      return idx;
+    }
+    document.getElementById('arrow-up').addEventListener('click', () => {
+      const idx = getCurrentSectionIndex();
+      if (idx > 0) {
+        sections[idx - 1].scrollIntoView({behavior:'smooth'});
+      }
+    });
+    document.getElementById('arrow-down').addEventListener('click', () => {
+      const idx = getCurrentSectionIndex();
+      if (idx < sections.length - 1) {
+        sections[idx + 1].scrollIntoView({behavior:'smooth'});
+      }
+    });
+
     // Confetti on cover
     (function () {
       const canvas = document.getElementById('confetti-canvas');
@@ -1290,8 +1321,8 @@
       resize();
       window.addEventListener('resize', resize);
 
-      const COLORS = ['#1db954', '#00e5ff', '#ff6b6b', '#ffd700', '#f39c12', '#9b59b6', '#e91e63'];
-      const pieces = Array.from({ length: 90 }, () => ({
+      const COLORS = ['#1db954','#00e5ff','#ff6b6b','#ffd700','#f39c12','#9b59b6','#e91e63'];
+      const pieces = Array.from({length: 90}, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height - canvas.height,
         w: Math.random() * 9 + 4,
