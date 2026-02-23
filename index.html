@@ -464,6 +464,29 @@
       align-items: center;
       padding: 80px 40px 60px;
     }
+    /* outro layout */
+    .outro-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 2rem;
+      width: 100%;
+      justify-content: center;
+    }
+    .outro-photo {
+      flex: 1 1 300px;
+      max-width: 400px;
+    }
+    .outro-photo img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 16px;
+    }
+    .outro-content {
+      flex: 1 1 300px;
+      max-width: 600px;
+    }
   </style>
 </head>
 
@@ -1286,19 +1309,18 @@
      OUTRO
 ═══════════════════════════════════════════ -->
   <div class="section s-outro fade-in">
-    <div class="w-40vw">
-
-      <div class="feature-photo">
+    <div class="outro-row">
+      <div class="outro-photo">
         <img src="IMG_20210809_135155.jpg" alt="Selfie z żoną w górach">
       </div>
-
-      <div
-        style="font-size:clamp(4rem,12vw,9rem);font-weight:900;background:linear-gradient(135deg,#1db954,#00e5ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin:1.5rem 0 0.5rem">
-        50 lat!
-      </div>
-      <div style="font-size:1.4rem;opacity:0.8;margin-bottom:0.5rem">
-        i wciąż pełen energii, pomysłów i humoru ⚡
-      </div>
+      <div class="outro-content">
+        <div
+          style="font-size:clamp(4rem,12vw,9rem);font-weight:900;background:linear-gradient(135deg,#1db954,#00e5ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin:1.5rem 0 0.5rem">
+          50 lat!
+        </div>
+        <div style="font-size:1.4rem;opacity:0.8;margin-bottom:0.5rem">
+          i wciąż pełen energii, pomysłów i humoru ⚡
+        </div>
 
       <div class="ticker-wrap">
         <div class="ticker">
