@@ -448,6 +448,20 @@
         grid-template-columns: 1fr;
       }
     }
+    
+    /* ── slide behaviour ── */
+    html, body {
+      scroll-snap-type: y mandatory;
+    }
+    .slide {
+      scroll-snap-align: start;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 80px 40px 60px;
+    }
   </style>
 </head>
 
@@ -1366,6 +1380,39 @@
       }
       draw();
     })();
+  </script>
+  
+  <!-- slide navigation and dynamic subchapter wrappers -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // wrap relevant children into slide containers inside each section
+      document.querySelectorAll('.section').forEach(section => {
+        const children = Array.from(section.children);
+        children.forEach(child => {
+          // only wrap actual content blocks, not canvas or nav arrows if present
+          if (child.matches('.ch') || child.matches('.grid') || child.matches('.sub-label') || child.matches('.feature-photo') || child.matches('.ticker-wrap')) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'slide';
+            section.insertBefore(wrapper, child);
+            wrapper.appendChild(child);
+          }
+        });
+      });
+
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      let currentIndex = 0;
+      function goTo(index) {
+        if (index < 0 || index >= slides.length) return;
+        currentIndex = index;
+        slides[currentIndex].scrollIntoView({ behavior: 'smooth' });
+      }
+      document.getElementById('arrow-up').addEventListener('click', () => goTo(currentIndex - 1));
+      document.getElementById('arrow-down').addEventListener('click', () => goTo(currentIndex + 1));
+      document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowDown' || e.key === 'PageDown') goTo(currentIndex + 1);
+        if (e.key === 'ArrowUp' || e.key === 'PageUp') goTo(currentIndex - 1);
+      });
+    });
   </script>
 </body>
 
