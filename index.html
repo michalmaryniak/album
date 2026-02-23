@@ -474,6 +474,8 @@
     <button id="arrow-up" style="background:rgba(0,0,0,0.5);border:none;color:#fff;font-size:2rem;padding:8px 12px;border-radius:50%;cursor:pointer;">▲</button>
     <button id="arrow-down" style="background:rgba(0,0,0,0.5);border:none;color:#fff;font-size:2rem;padding:8px 12px;border-radius:50%;cursor:pointer;">▼</button>
   </div>
+  <button id="arrow-left" style="position:fixed;top:50%;left:20px;transform:translate(-100%, -50%);background:rgba(0,0,0,0.5);border:none;color:#fff;font-size:2rem;padding:8px 12px;border-radius:50%;cursor:pointer;">◀</button>
+  <button id="arrow-right" style="position:fixed;top:50%;right:20px;transform:translate(100%, -50%);background:rgba(0,0,0,0.5);border:none;color:#fff;font-size:2rem;padding:8px 12px;border-radius:50%;cursor:pointer;">▶</button>
 
   <!-- ═══════════════════════════════════════════
      COVER
@@ -1408,9 +1410,13 @@
       }
       document.getElementById('arrow-up').addEventListener('click', () => goTo(currentIndex - 1));
       document.getElementById('arrow-down').addEventListener('click', () => goTo(currentIndex + 1));
+      const leftBtn = document.getElementById('arrow-left');
+      const rightBtn = document.getElementById('arrow-right');
+      if (leftBtn) leftBtn.addEventListener('click', () => goTo(currentIndex - 1));
+      if (rightBtn) rightBtn.addEventListener('click', () => goTo(currentIndex + 1));
       document.addEventListener('keydown', e => {
-        if (e.key === 'ArrowDown' || e.key === 'PageDown') goTo(currentIndex + 1);
-        if (e.key === 'ArrowUp' || e.key === 'PageUp') goTo(currentIndex - 1);
+        if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === 'ArrowRight') goTo(currentIndex + 1);
+        if (e.key === 'ArrowUp' || e.key === 'PageUp' || e.key === 'ArrowLeft') goTo(currentIndex - 1);
       });
     });
   </script>
