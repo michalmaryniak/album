@@ -1399,6 +1399,16 @@
             wrapper.appendChild(child);
           }
         });
+        // if no slides were created (cover or minimal section), wrap whole section
+        if (section.querySelectorAll('.slide').length === 0) {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'slide';
+          // move all children into wrapper
+          while (section.firstChild) {
+            wrapper.appendChild(section.firstChild);
+          }
+          section.appendChild(wrapper);
+        }
       });
 
       const slides = Array.from(document.querySelectorAll('.slide'));
